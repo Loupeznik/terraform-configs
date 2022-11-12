@@ -76,7 +76,7 @@ resource "azurerm_network_security_group" "test" {
   }
 }
 
-resource "azurerm_network_interface_security_group_association" "example" {
+resource "azurerm_network_interface_security_group_association" "test" {
   network_interface_id      = azurerm_network_interface.test.id
   network_security_group_id = azurerm_network_security_group.test.id
 }
