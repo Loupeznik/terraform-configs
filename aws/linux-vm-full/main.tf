@@ -71,7 +71,6 @@ resource "aws_security_group" "test" {
   }
 }
 
-
 resource "aws_network_interface_sg_attachment" "test_attachment" {
   security_group_id    = aws_security_group.test.id
   network_interface_id = aws_network_interface.test.id
@@ -100,11 +99,6 @@ resource "aws_route_table" "test" {
 
 resource "aws_route_table_association" "test" {
   subnet_id      = aws_subnet.test.id
-  route_table_id = aws_route_table.test.id
-}
-
-resource "aws_main_route_table_association" "a" {
-  vpc_id         = aws_vpc.test.id
   route_table_id = aws_route_table.test.id
 }
 
