@@ -31,17 +31,17 @@ resource "azurerm_subnet" "test" {
 }
 
 resource "azurerm_kubernetes_cluster" "test" {
-  name                = "aks_dz_kube_test_01"
-  location            = azurerm_resource_group.test.location
-  resource_group_name = azurerm_resource_group.test.name
-  dns_prefix          = "dz-kube-01"
+  name                      = "aks_dz_kube_test_01"
+  location                  = azurerm_resource_group.test.location
+  resource_group_name       = azurerm_resource_group.test.name
+  dns_prefix                = "dz-kube-01"
   automatic_channel_upgrade = "stable"
 
   default_node_pool {
-    name           = "default"
-    node_count     = 1
-    vm_size        = "Standard_B2s"
-    vnet_subnet_id = azurerm_subnet.test.id
+    name            = "default"
+    node_count      = 1
+    vm_size         = "Standard_B2s"
+    vnet_subnet_id  = azurerm_subnet.test.id
     os_disk_size_gb = 32
   }
 
@@ -52,15 +52,25 @@ resource "azurerm_kubernetes_cluster" "test" {
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
+    network_policy    = "calico"
 
     load_balancer_profile {
       managed_outbound_ip_count = 1
     }
   }
+
+
+  dynamic "azure_active_directory_role_based_access_control" {
+    for_each = var.enable_aad ? [1] : []
+    content {
+      managed            = true
+      azure_rbac_enabled = true
+    }
+  }
 }
 
 output "kube_config" {
-  value = azurerm_kubernetes_cluster.test.kube_config_raw
+  value     = azurerm_kubernetes_cluster.test.kube_config_raw
   sensitive = true
 }
 
