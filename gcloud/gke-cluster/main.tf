@@ -54,5 +54,6 @@ resource "google_container_node_pool" "primary_pool" {
 
   management {
     auto_upgrade = true
+    auto_repair  = true
   }
 }
